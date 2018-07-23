@@ -29,11 +29,13 @@ public class MongoDBConnector {
 	private MongoClient mongoClient;
 	private MongoCollection statsCollection;
 	private ArrayList<MongoGameStat> TopFiveList;
+	private JsonObject JsonforTopFive;
 	
 	public MongoDBConnector() {
 		mongoClient = new MongoClient("localhost", 27017);
 		database = mongoClient.getDatabase(DBNAME);
 		TopFiveList = new ArrayList<MongoGameStat>();
+		JsonforTopFive = null;
 		if (!!!isCollectionExist(COLLECTION)) {
 			database.createCollection(COLLECTION);
 		}
@@ -70,7 +72,7 @@ public class MongoDBConnector {
 		return null;
 	}
 	
-	public JsonObject topfive(){
+	public ArrayList<MongoGameStat> topfive(){
 		TopFiveList.clear();
 		AggregateIterable<Document> output = this.statsCollection.aggregate(Arrays.asList(
 		        //new Document("$group", new Document("_id","$_id").append("score", new Document("$max","$score"))),
@@ -88,12 +90,13 @@ public class MongoDBConnector {
 		    builder.add(dbObject.get("name").toString(), dbObject.get("score").toString());
 			
 		}
-   	 	return builder.build();
+		JsonforTopFive = builder.build();
+   	 	return TopFiveList;
 
 	}
 	
-	public ArrayList<MongoGameStat> topfivelist(){
-		return TopFiveList;
+	public JsonObject topfiveJson(){
+		return JsonforTopFive;
 	}
 	
 	
