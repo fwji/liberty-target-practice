@@ -17,6 +17,7 @@
 var x;
 var finalScore = document.getElementById('finalScore');
 var endMusic = $('#audio-end')[0];
+var isRankedGame = false;
 /*
 for (x in leaders) {
   document.getElementById('board').innerHTML +=
@@ -30,6 +31,7 @@ for (x in leaders) {
 
 
 // Run on the page load
+$("#board").hide();
 $(endGame());
 
 function endGame() {
@@ -45,8 +47,9 @@ function showGameStats(data) {
   console.log("GET score: " + data.score);
   finalScore.textContent = data.score;
   var leaders = data.leaders;
-  console.log(leaders);
+  var count = 0;
   for (x in leaders) {
+    count++;
     var gamestat = leaders[x];
     document.getElementById('board').innerHTML +=
     '<li class="rank">' +
@@ -55,12 +58,20 @@ function showGameStats(data) {
     '<small class="pts">' + gamestat.score +
     '</small></li>';    
   }
+  if (count > 0){
+    console.log(leaders);
+    isRankedGame = true;
+    $("#board").show();
+  }
 }
 
 $("#startOverBtn").click(function() {
-  pageRedirect();
+  pageRedirect(isRankedGame);
 });
 
-function pageRedirect() {
-  window.location.replace("index.html");
+function pageRedirect(isRankedGame) {
+  if (isRankedGame)
+    window.location.replace("index.html");
+  else 
+    window.location.replace("index_practice.html");
 }
