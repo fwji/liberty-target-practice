@@ -61,6 +61,10 @@ $("#arrowRight").mouseup(function() {
   panShip();
 });
 
+$("#stop_button").click(function() {
+  stopGame();
+});
+
 var scoreMusic = $('#audio-score')[0];
 var scoreMusic500 = $('#audio-score500')[0];
 var laserSound = $('#audio-laser')[0];
@@ -80,6 +84,27 @@ function startGame() {
   };
 }
 
+function stopGame() {
+      $.ajax({
+      type: "POST",
+      url: "/SentryTargetChallenge/gameapp/game/stopgame",
+      success: stopGameSuccess,
+      error: stopGameFail,
+      dataType: "json"
+    }); 
+}
+
+function stopGameSuccess() {
+  clearInterval(runningTimer);
+  sendSocket("stopShip");
+  websocket.close();
+  pageRedirect();
+}
+
+
+function stopGameFail() {
+  alert("Unable to stop the game due to internal server error");
+}
 // Keyboard action
 function arrowDown(e) {
   e.preventDefault();
@@ -247,10 +272,7 @@ function runTimer() {
     }
     // if time is up (reached max of 60 secs) stop timer
     if (runTimer < countDownTime) {
-      clearInterval(runningTimer);
-      sendSocket("stopShip");
-      websocket.close();
-      pageRedirect();
+      stopGameSuccess();
       return;
     }
 
@@ -260,7 +282,9 @@ function runTimer() {
 }
 
 function pageRedirect() {
-  window.location.replace("results.html");
+  setTimeout(function() {
+  window.location.href = "results.html";
+  }, 2000);
 }
 
 function fireLaser() {

@@ -25,7 +25,7 @@ public class MongoDBConnector {
 	private MongoCollection<Document> statsCollection;
 	
 	private MongoDBConnector(boolean testDB) {
-		mongoClient = new MongoClient("localhost", 27017);
+		mongoClient = new MongoClient("127.0.0.1", 27017);
 		if (testDB)
 			database = mongoClient.getDatabase(TESTDBNAME);
 		else

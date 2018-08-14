@@ -15,7 +15,7 @@ $("#z-slider")
 
 $( "#z-slider" ).on( "slide", function( event, ui ) {
   console.log(ui.value)
-  sendSocket(ui.value);
+  sendSocket("V=" + ui.value);
 } );
 
 $("#y-slider")
@@ -32,7 +32,7 @@ $("#y-slider")
 
 $( "#y-slider" ).on( "slide", function( event, ui ) {
   console.log(ui.value)
-  sendSocket(ui.value);
+  sendSocket("H=" + ui.value);
 } );
 
 var target_status = document.getElementById('target_status');
@@ -150,16 +150,18 @@ var websocket_url = null;
 
 $(init('/SentryTargetChallenge/shipsocket'));
 
+/***********************************************************
+ *********************** WEB SOCKET ************************
+ ***********************************************************/
 function init(url) {
   console.log("init %o, %s, %s", websocket, url);
-  if ( websocket !== null ) {
+  if (websocket != null) {
     websocket.close();
     websocket = null;
   }
 
   // Set the URL, always reset the use_encoder attribute
   websocket_url = "ws://" + window.document.location.host + url;
-  use_encoder = false;
   console.log(".. init %s, %s", url);
 
 }
@@ -167,28 +169,48 @@ function init(url) {
 
 function sendSocket(payload) {
   console.log("sendSocket %o, %s", websocket, websocket_url);
-  if ( websocket === null ) {
+  if (websocket === null) {
     websocket = new WebSocket(websocket_url);
 
     websocket.onerror = function(event) {
+      console.log('Error: ' + event.data);
     }
 
     websocket.onopen = function(event) {
-      if ( payload ) {
-        websocket.send(payload);
-      }
+      console.log("Connection established!");
+      // Start the Space Ship
+      sendSocket("startShip");
     }
 
     websocket.onclose = function(event) {
       websocket = null;
+      webSocketConnected = false;
+      console.log("Connection closed : " + event.code);
     }
 
     websocket.onmessage = function(event) {
+      console.log("Message" + event.data);
     }
-  } else if ( payload ) {
+  } else if (payload) {
     websocket.send(payload);
   }
 
   console.log(".. sendSocket %o, %s", websocket, websocket_url);
   return websocket;
+}
+
+$("#menuButton").click(function() {
+  cleanupSocket();
+  pageRedirect();
+});
+
+function pageRedirect() {
+  window.location.replace("menu.html");
+}
+
+function cleanupSocket(){
+     // Write your business logic here
+     console.log('clean up socket');
+     sendSocket("stopShip");
+     websocket.close();
 }
