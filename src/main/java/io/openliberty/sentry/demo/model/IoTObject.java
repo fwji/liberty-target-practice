@@ -72,9 +72,14 @@ public abstract class IoTObject implements IoTConnection{
 		String rawtcp = TCPUtils.convertTCPCommandToString(c);
 		try {
 			String response = tcpClient.sendCommand(rawtcp);
-			while (response.contains(TCPClient.TCP_NC)) {
+			int retry = 3;
+			while (response.contains(TCPClient.TCP_NC) && retry > 0) {
+				retry--;
 				System.out.println("response is not ok, resending command " + response);
 				response = tcpClient.sendCommand(rawtcp);
+			}
+			if (retry == 0) {
+				System.out.println("Unable to send message to tcpClient due max retry reached");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -91,9 +96,14 @@ public abstract class IoTObject implements IoTConnection{
 			sb.append(rawtcp).append(args);
 			String responseWithArgs = sb.toString();
 			String response = tcpClient.sendCommand(responseWithArgs);
-			while (response.contains(TCPClient.TCP_NC)) {
+			int retry = 3;
+			while (response.contains(TCPClient.TCP_NC) && retry > 0) {
+				retry--;
 				System.out.println("response is not ok, resending command " + responseWithArgs);
 				response = tcpClient.sendCommand(responseWithArgs);
+			}
+			if (retry == 0) {
+				System.out.println("Unable to send message to tcpClient due max retry reached");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -104,10 +114,10 @@ public abstract class IoTObject implements IoTConnection{
 	}
 	
 	public String getData() throws IOException{
-		int count = 0;
+		int retry = 2;
 		String rxData = null;
-		while ((rxData = tcpClient.getData()) == null  && count < 2) {
-			count++;
+		while ((rxData = tcpClient.getData()) == null  && retry > 0) {
+			retry--;
 		}
         return rxData;
 	}

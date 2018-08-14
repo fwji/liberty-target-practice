@@ -15,7 +15,7 @@ public class Game implements Runnable{
 	private TargetArray targets;
 	
 	private boolean running = false;
-	
+	private boolean remoteGameRunning = false;
 	private AtomicBoolean iswaiting = new AtomicBoolean(false);
 	private GameStat stat;
 	private GameStatsManager statsManager;
@@ -48,13 +48,19 @@ public class Game implements Runnable{
         return running;
     }
     
-    public void stopGameCycle() throws Exception {
+    public void stop() {
+    	running = false;
+    }
+    
+    public synchronized void stopGameCycle() throws Exception {
     	System.out.println("Stop game cycle");
     	if (!!!isPracticeGame)
     		writeScore();
+    	if (remoteGameRunning)
+    		targets.stopGameCycle();
+    	remoteGameRunning = false;
     	running = false;
     	iswaiting.set(false);
-    	targets.stopGameCycle();
     }
 	
     public void startGameCycle() throws Exception {
@@ -67,6 +73,7 @@ public class Game implements Runnable{
 			e1.printStackTrace();
 		}
 		targets.startGameCycle();
+		remoteGameRunning = true;
     }
     
     public void testGameCycle() throws Exception {
@@ -126,11 +133,17 @@ public class Game implements Runnable{
 				                this.notifyAll();
 				            }
 						}
+					} else {
+						throw new IOException("Device disconnected, end game sesion");
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					running = false;
+		            synchronized(this) {
+		            	iswaiting.set(false);
+		            	running = false;
+		                this.notifyAll();
+		            }
 				}				
 			}
 		}

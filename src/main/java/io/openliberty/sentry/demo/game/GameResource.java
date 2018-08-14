@@ -152,6 +152,26 @@ public class GameResource {
                  .build();
     }
     
+    @POST
+    @Path("stopgame")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response stopCurrentGame() {
+    	JsonObjectBuilder builder = Json.createObjectBuilder();
+    	builder.add("result", "success");
+    	if (game != null) {
+    		try {
+				game.stopGameCycle();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+	                    .entity(builder.build())
+	                        .build();
+			}
+    	}
+   	 	return Response.ok(builder.build())
+                 .build();
+    }
+    
     @GET
     @Path("gamestream")
     @Produces(MediaType.SERVER_SENT_EVENTS)
