@@ -1,0 +1,14 @@
+TODOs before graham:
+
+UI
+1. Practice result page without leaderboard display
+2. End game button 
+3. Ship control from admin page
+
+Liberty App:
+1. Unable to reconnect ship when disconnected  (need test)
+2. MongoDB 2.4 support (tentative)
+
+Firmware
+1. All targets can be selected (might be UI issue)
+2. Use laser to guide and fire button to enable and disable a flag to go down
