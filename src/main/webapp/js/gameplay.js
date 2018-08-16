@@ -7,6 +7,7 @@ var moveTilt = false;
 var movePan = false;
 var anglePan = 125;
 var angleTilt = 6;
+var gameStarted = false;
 var moveUp = 0;
 var moveDown = 0;
 var moveLeft = 0;
@@ -97,6 +98,7 @@ function stopGame() {
 function stopGameSuccess() {
   clearInterval(runningTimer);
   sendSocket("stopShip");
+  gameStarted = false;
   websocket.close();
   pageRedirect();
 }
@@ -367,6 +369,7 @@ function printToTerminal() {
   $("#gameShow").hide();
   // Start WebSocket
   init('/SentryTargetChallenge/shipsocket');
+  gameStarted = true;
   sendSocket("Hello Earthlings!");
 
   type("Initiating systems...")
@@ -416,7 +419,8 @@ function sendSocket(payload) {
     websocket.onopen = function(event) {
       console.log("Connection established!");
       // Start the Space Ship
-      sendSocket("startShip");
+      if (gameStarted)
+        sendSocket("startShip");
     }
 
     websocket.onclose = function(event) {
@@ -428,7 +432,7 @@ function sendSocket(payload) {
     websocket.onmessage = function(event) {
       console.log("Message" + event.data);
     }
-  } else if (payload) {
+  } else if (payload && gameStarted) {
     websocket.send(payload);
   }
 
