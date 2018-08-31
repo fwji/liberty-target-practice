@@ -2,16 +2,16 @@
 FROM open-liberty:latest
 
 # Create a Liberty server instance called "SentryTargetChallengeServer"
-RUN /opt/ol/wlp/bin/server create SentryTargetChallengeServer
+#RUN /opt/ol/wlp/bin/server create SentryTargetChallengeServer
 
 # Copy over the customized server.xml to the Liberty server
-COPY src/main/liberty/config/server.xml /opt/ol/wlp/usr/servers/SentryTargetChallengeServer/
+COPY src/main/liberty/config/server.xml /opt/ol/wlp/usr/servers/default/
 
 # Copy over the jvm.options to the Liberty server
-COPY src/main/liberty/config/resources/jvm.options /opt/ol/wlp/usr/servers/SentryTargetChallengeServer/
+COPY src/main/liberty/config/resources/jvm.options /opt/ol/wlp/usr/servers/default/
 
 #Copy over the bootstrap.properties to the Liberty Server
-COPY target/liberty/wlp/usr/servers/SentryTargetChallengeServer/bootstrap.properties /opt/ol/wlp/usr/servers/SentryTargetChallengeServer/
+COPY target/liberty/wlp/usr/servers/SentryTargetChallengeServer/bootstrap.properties /opt/ol/wlp/usr/servers/default/
 
 # Copy the SentryTargetChallenge-1.0-SNAPSHOT.war  WAR application to the Liberty server
 COPY target/SentryTargetChallenge*.war /opt/ol/wlp/usr/servers/SentryTargetChallengeServer/apps/SentryTargetChallenge.war
