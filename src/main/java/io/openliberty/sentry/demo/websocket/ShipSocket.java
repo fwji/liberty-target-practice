@@ -48,15 +48,21 @@ public class ShipSocket {
 			else if (message.equals("stopShip")) {
 				spaceShip.stopShip();	
 			}
-			else if (message.contains("H=")) {
-				String panAngle = message.substring(2).trim();
-				System.out.println("PanAngle: " + panAngle);
-				spaceShip.sendCommand(TCPCommand.S_PANSHIP, panAngle);
+			else if (message.contains("HL")) {
+				System.out.println("Pan Direction: Left");
+				spaceShip.sendCommand(TCPCommand.S_PANSHIP_LEFT);
+			}			
+			else if (message.contains("HR")) {
+				System.out.println("Pan Direction: Right");
+				spaceShip.sendCommand(TCPCommand.S_PANSHIP_RIGHT);
 			}
-			else if (message.contains("V=")) {
-				String tiltAngle = message.substring(2).trim();
-				System.out.println("PanAngle: " + tiltAngle);
-				spaceShip.sendCommand(TCPCommand.S_TILTSHIP, tiltAngle);
+			else if (message.contains("VU")) {
+				System.out.println("Pan Direction: Up");
+				spaceShip.sendCommand(TCPCommand.S_PANSHIP_UP);
+			}			
+			else if (message.contains("VD")) {
+				System.out.println("Pan Direction: Down");
+				spaceShip.sendCommand(TCPCommand.S_PANSHIP_DOWN);
 			}
 			else if (message.equals("fireLaser")) {
 				spaceShip.sendCommand(TCPCommand.S_FIRELASER);
