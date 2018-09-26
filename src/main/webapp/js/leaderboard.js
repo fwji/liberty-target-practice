@@ -33,9 +33,6 @@ for (x in leaders) {
 // Run on the page load
 $("#board").hide();
 $(endGame());
-setTimeout(function(){
-     window.location.reload();
-}, 3000);
 
 function endGame() {
   $.get("/SentryTargetChallenge/gameapp/game/leaderboard", function(data) {
