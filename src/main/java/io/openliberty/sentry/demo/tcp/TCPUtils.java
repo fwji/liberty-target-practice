@@ -36,10 +36,14 @@ public class TCPUtils {
 			switch(cmd) {
 	            case "fireLaser":
 	            	return TCPCommand.S_FIRELASER;
-	            case "panShip":
-	            	return TCPCommand.S_PANSHIP;
-	            case "tiltShip":
-	            	return TCPCommand.S_TILTSHIP;
+	            case "panShipLeft":
+	            	return TCPCommand.S_PANSHIP_LEFT;
+	            case "panShipRight":
+	            	return TCPCommand.S_PANSHIP_RIGHT;
+				case "panShipUp":
+	            	return TCPCommand.S_PANSHIP_UP;
+				case "panShipDown":
+	            	return TCPCommand.S_PANSHIP_DOWN;
 	            default:
 	                System.out.println("invalid request cmd, not TCPCommand is matched.");
 			}
@@ -78,10 +82,14 @@ public class TCPUtils {
 				return "T_HV=";
 			case S_FIRELASER:
 				return "FIRE";
-			case S_PANSHIP:
-				return "SRH=";
-			case S_TILTSHIP:
-				return "SRV=";
+			case S_PANSHIP_LEFT:
+				return "LFT";
+			case S_PANSHIP_RIGHT:
+				return "RGT";
+			case S_PANSHIP_UP:
+				return "UP";
+			case S_PANSHIP_DOWN:
+				return "DWN";
 			default:
 				System.out.println("Should not reach here");
 		}

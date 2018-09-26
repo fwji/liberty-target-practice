@@ -3,15 +3,11 @@ var scoreVal = document.getElementById('scoreVal');
 var beamText = document.getElementById('beamText');
 const countDownTime = 1;
 let runningTimer;
-var moveTilt = false;
-var movePan = false;
-var anglePan = 125;
-var angleTilt = 6;
+var movePanLeft = false;
+var movePanRight = false;
+var moveTiltUp = false;
+var moveTiltDown = false;
 var gameStarted = false;
-var moveUp = 0;
-var moveDown = 0;
-var moveLeft = 0;
-var moveRight = 0;
 var websocket = null;
 var websocket_url = null;
 window.addEventListener('keyup', arrowUp)
@@ -33,20 +29,16 @@ $("#fireLaser").click(function() {
 
 // Mouse action
 $("#arrowUp").mousedown(function() {
-  moveTilt = true;
-  moveUp -= 1;
+	moveTiltUp = true;
 });
 $("#arrowDown").mousedown(function() {
-  moveTilt = true;
-  moveDown += 1;
+	moveTiltDown = true;
 });
 $("#arrowLeft").mousedown(function() {
-  movePan = true;
-  moveLeft += 2;
+	movePanLeft = true;
 });
 $("#arrowRight").mousedown(function() {
-  movePan = true;
-  moveRight -= 2;
+	movePanRight = true;
 });
 
 $("#arrowUp").mouseup(function() {
@@ -119,20 +111,16 @@ function arrowDown(e) {
   }
   if (e.which == 37) {
     //console.log("Keyboard - Moving left!!");
-    movePan = true;
-    moveLeft += 2;
+    movePanLeft = true;
   } else if (e.which == 39) {
     //console.log("Keyboard - Moving right!!");
-    movePan = true;
-    moveRight -= 2;
+    movePanRight = true;
   } else if (e.which == 38) {
     //console.log("Keyboard - Moving up!!");
-    moveTilt = true;
-    moveUp -= 1;
+	moveTiltUp = true;
   } else if (e.which == 40) {
     //console.log("Keyboard - Moving down!!");
-    moveTilt = true;
-    moveDown += 1;
+	moveTiltDown = true;
   }
 }
 
@@ -155,15 +143,14 @@ function arrowUp(e) {
     const key = document.querySelector(`.arrow-key[data-key="${e.which}"]`);
     key.classList.remove('press');
   }
-  console.log("MoveRight=" + moveRight + " MoveLeft=" + moveLeft + " moveUp=" +
-    moveUp + " moveDown=" + moveDown);
+  console.log("MoveRight=" + movePanRight + " MoveLeft=" + movePanLeft + " MoveUp=" + moveTiltUp + " MoveDown=" + moveTiltDown);
   if (e.which == 37 || e.which == 39) {
-    panShip();
+	  setTimeout(panShip, 250);
   } else if (e.which == 38 || e.which == 40) {
-    tiltShip();
+	  setTimeout(tiltShip, 250);
   } else if (e.which == 32) {
-    laserSound.play();
-    fireLaser();
+	  laserSound.play();
+	  fireLaser();
   }
 }
 
@@ -194,44 +181,34 @@ function toggleBeamOff() {
 }
 
 function tiltShip() {
-  if (moveTilt) {
-    angleTilt += moveUp + moveDown;
-    if (angleTilt <= 0) {
-      angleTilt = 0;
-    } else if (angleTilt >= 15) {
-      angleTilt = 15;
-    }
+  if (moveTiltUp) {
+	  console.log("Moving Up...");
+	  sendSocket("VU");
+	  moveTiltUp = false;
+  } 
+  else if (moveTiltDown) {
+	  console.log("Moving Down...");
+	  sendSocket("VD");
+	  moveTiltDown = false;
+  } else {
+	  // Do nothing
   }
-
-  // Reset values
-  moveUp = 0;
-  moveDown = 0;
-  moveTilt = false;
-
-  // Send new angle to server
-  console.log("AngleV: " + angleTilt);
-  sendSocket("V=" + angleTilt);
 }
 
 
 function panShip() {
-  if (movePan) {
-    anglePan += moveLeft + moveRight;
-    if (anglePan <= 90) {
-      anglePan = 90;
-    } else if (anglePan >= 150) {
-      anglePan = 150;
-    }
+  if (movePanLeft) {
+	  console.log("Moving Left...");
+	  sendSocket("HL");
+	  movePanLeft = false;
+  } 
+  else if (movePanRight) {
+	  console.log("Moving Right...");
+	  sendSocket("HR");
+	  movePanRight = false;
+  } else {
+	  // Do nothing
   }
-
-  // Reset values
-  moveLeft = 0;
-  moveRight = 0;
-  movePan = false;
-
-  // Send new angle to server
-  console.log("AngleH: " + anglePan);
-  sendSocket("H=" + anglePan);
 }
 
 function updateScore(event) {
@@ -433,6 +410,7 @@ function sendSocket(payload) {
       console.log("Message" + event.data);
     }
   } else if (payload && gameStarted) {
+	console.log("Sending message : ", payload);
     websocket.send(payload);
   }
 
