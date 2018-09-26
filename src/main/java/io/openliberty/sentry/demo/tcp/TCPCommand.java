@@ -20,5 +20,4 @@ public enum TCPCommand {
 	S_PANSHIP_RIGHT,
 	S_PANSHIP_UP,
 	S_PANSHIP_DOWN,
-	S_TILTSHIP
 }
