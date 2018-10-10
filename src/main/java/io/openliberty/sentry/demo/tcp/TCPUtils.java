@@ -36,6 +36,14 @@ public class TCPUtils {
 			switch(cmd) {
 	            case "fireLaser":
 	            	return TCPCommand.S_FIRELASER;
+	            case "fireLaserOff":
+	            	return TCPCommand.S_FIRELASER_OFF;
+	            case "resetShip":
+	            	return TCPCommand.S_RESET_SHIP;
+	            case "sweepPan":
+	            	return TCPCommand.S_SWEEP_PAN;
+	            case "sweepTilt":
+	            	return TCPCommand.S_SWEEP_TILT;
 	            case "panShipLeft":
 	            	return TCPCommand.S_PANSHIP_LEFT;
 	            case "panShipRight":
@@ -82,6 +90,14 @@ public class TCPUtils {
 				return "T_HV=";
 			case S_FIRELASER:
 				return "FIRE";
+			case S_FIRELASER_OFF:
+				return "LSROFF";
+			case S_RESET_SHIP:
+				return "GG";
+			case S_SWEEP_PAN:
+				return "PAN";
+			case S_SWEEP_TILT:
+				return "TILT";
 			case S_PANSHIP_LEFT:
 				return "LFT";
 			case S_PANSHIP_RIGHT:

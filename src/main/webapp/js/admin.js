@@ -1,40 +1,3 @@
-$.extend( $.ui.slider.prototype.options, { 
-  animate: 300
-});
-
-$("#z-slider")
-.slider({
-        animate: "slow",
-        min: 0, 
-        max: 15, 
-        step: 3 
-})
-.slider("pips", {
-    rest: "label"
-});
-
-$( "#z-slider" ).on( "slide", function( event, ui ) {
-  console.log(ui.value)
-  sendSocket("V=" + ui.value);
-} );
-
-$("#y-slider")
-.slider({
-        animate: "slow",
-        min: 0, 
-        max: 180, 
-        step: 20 
-})
-.slider("pips", {
-    rest: "label"
-});
-
-
-$( "#y-slider" ).on( "slide", function( event, ui ) {
-  console.log(ui.value)
-  sendSocket("H=" + ui.value);
-} );
-
 var target_status = document.getElementById('target_status');
 var target_ip = document.getElementById('target_ip');
 var target_button = document.getElementById('target_button');
@@ -43,6 +6,9 @@ var target_button = document.getElementById('target_button');
 //Run on the page load
 $(getDevicesStatus());
 
+/***********************
+******* TARGETS ********
+************************/
 $("#target_button1").click(function() {
   sendDeviceCommandReq("targets", "target1");
 });
@@ -77,11 +43,25 @@ $("#litupdate_button").click(function() {
   sendDeviceCommandReq("targets", "litupdate", litvalue);
 });
 
+
+/*************************
+******* SPACESHIP ********
+**************************/
+$("#ship_sweep_pan_btn").click(function() {
+  sendSocket("sweepPan");
+});
+$("#ship_sweep_tilt_btn").click(function() {
+  sendSocket("sweepTilt");
+});
 $("#ship_firebutton").click(function() {
   sendSocket("fireLaser");
 });
-
-
+$("#ship_firebutton_off").click(function() {
+  sendSocket("fireLaserOff");
+});
+$("#ship_reset").click(function() {
+  sendSocket("resetShip");
+});
 
 function sendDeviceCommandReq(device, cmd){
     $.ajax({
@@ -104,6 +84,8 @@ function sendDeviceCommandReq(device, cmd, value){
 }
 
 function getDevicesStatus() {
+  init('/SentryTargetChallenge/shipsocket');
+  sendSocket("Hello Earthlings!");
   $.get("/SentryTargetChallenge/adminapp/admin/devices/targets", function(data) {
     showDevicesStatus(data, "targets");
   });
@@ -148,7 +130,7 @@ function fail() {
 var websocket = null;
 var websocket_url = null;
 
-$(init('/SentryTargetChallenge/shipsocket'));
+//$(init('/SentryTargetChallenge/shipsocket'));
 
 /***********************************************************
  *********************** WEB SOCKET ************************
@@ -178,8 +160,8 @@ function sendSocket(payload) {
 
     websocket.onopen = function(event) {
       console.log("Connection established!");
-      // Start the Space Ship
-      sendSocket("startShip");
+      // Initiate the Space Ship
+      //sendSocket("WebSocket Opened");
     }
 
     websocket.onclose = function(event) {
@@ -192,7 +174,9 @@ function sendSocket(payload) {
       console.log("Message" + event.data);
     }
   } else if (payload) {
-    websocket.send(payload);
+	  if (websocket.readyState == 1) {
+		  websocket.send(payload);
+	  }
   }
 
   console.log(".. sendSocket %o, %s", websocket, websocket_url);
@@ -211,6 +195,6 @@ function pageRedirect() {
 function cleanupSocket(){
      // Write your business logic here
      console.log('clean up socket');
-     sendSocket("stopShip");
+     sendSocket("resetShip");
      websocket.close();
 }

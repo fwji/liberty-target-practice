@@ -145,9 +145,11 @@ function arrowUp(e) {
   }
   console.log("MoveRight=" + movePanRight + " MoveLeft=" + movePanLeft + " MoveUp=" + moveTiltUp + " MoveDown=" + moveTiltDown);
   if (e.which == 37 || e.which == 39) {
-	  setTimeout(panShip, 250);
+	  panShip();
+	  //setTimeout(panShip, 250);
   } else if (e.which == 38 || e.which == 40) {
-	  setTimeout(tiltShip, 250);
+	  tiltShip();
+	  //setTimeout(tiltShip, 250);
   } else if (e.which == 32) {
 	  laserSound.play();
 	  fireLaser();
@@ -314,7 +316,7 @@ var bind = Function.prototype.bind,
           wait ? setTimeout(next, wait) : next();
           if (jQuery.inArray("#", args) != -1) {
             bgMusic.pause();
-            setTimeout("startGame()", 1000);
+            setTimeout("startGame()", 2500);
           }
         }
       }
@@ -352,11 +354,11 @@ function printToTerminal() {
   type("Initiating systems...")
     .then("Connecting to Target and Spaceship systems... ")
     .then("Engaging all Targets... OK")
-    .wait(500)
+    .wait(1500)
     .then("Starting the Spaceship... OK")
-    .wait(500)
+    .wait(4500)
     .then("Laser Energy output... 98.9%")
-    .wait(500)
+    .wait(1500)
     .then("All systems are green")
     .wait(1000)
     .then("#");

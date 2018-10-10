@@ -67,6 +67,18 @@ public class ShipSocket {
 			else if (message.equals("fireLaser")) {
 				spaceShip.sendCommand(TCPCommand.S_FIRELASER);
 			} 
+			else if (message.equals("fireLaserOff")) {
+				spaceShip.sendCommand(TCPCommand.S_FIRELASER_OFF);
+			} 
+			else if (message.equals("resetShip")) {
+				spaceShip.sendCommand(TCPCommand.S_RESET_SHIP);
+			} 
+			else if (message.equals("sweepPan")) {
+				spaceShip.sendCommand(TCPCommand.S_SWEEP_PAN);
+			} 
+			else if (message.equals("sweepTilt")) {
+				spaceShip.sendCommand(TCPCommand.S_SWEEP_TILT);
+			} 
 		}	
 	}
 
