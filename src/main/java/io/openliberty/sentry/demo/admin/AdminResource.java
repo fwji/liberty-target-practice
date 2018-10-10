@@ -76,7 +76,7 @@ public class AdminResource {
     public Response postEspCmd(@PathParam("device")String device, @PathParam("cmd")String cmd, @PathParam("value")String value) {
         // tag::method-contents[]
     	JsonObjectBuilder builder = Json.createObjectBuilder();
-    	System.out.println(value);
+    	System.out.println("Device: " + device + " Cmd: " + cmd + " Value: " + value);
     	//corner cases
     	if (device == null || device.isEmpty()) {
     		return Response.status(Response.Status.BAD_REQUEST)

@@ -110,23 +110,28 @@
 		      <div> IP: <span id="ship_ip">Unknown</span> </div>
 		      <div class="futurepanel__divider"></div>
 	  		</div>	
-	    	<div>
-	  		  <div class="futureinput futureinput--text">
-		        <label for="example1">Z-Axis Pan</label>
-		        <div class="custom-slider" id="z-slider"></div>
-		      </div>
-		      <div class="futurepanel__divider"></div>
-	  		</div>
-	    	<div>
-	  		  <div class="futureinput futureinput--text">
-		        <label for="example1">Y-Axis Tilt</label>
-		        <div class="custom-slider" id="y-slider"></div>
-		      </div>
-		      <div class="futurepanel__divider"></div>
-	  		</div>
-	  		<div>
-	  			<button class="futurebutton" id="ship_firebutton">fire laser</button>
-	  		</div>		
+		      <div class="futuregrid">
+		        <div class="futuregrid__row">
+		          <h4 class="futuregrid__cell">Sweep Pan</h4>
+		          <button class="futurebutton" id="ship_sweep_pan_btn">RUN</button>
+		        </div>
+		        <div class="futuregrid__row">
+		          <h4 class="futuregrid__cell">Sweep Tilt</h4>
+		          <button class="futurebutton" id="ship_sweep_tilt_btn">RUN</button>
+		        </div>
+		        <div class="futuregrid__row">
+		          <h4 class="futuregrid__cell">Laser on</h4>
+		          <button class="futurebutton" id="ship_firebutton">TOGGLE</button>
+		        </div>
+		        <div class="futuregrid__row">
+		          <h4 class="futuregrid__cell">Laser Off</h4>
+		          <button class="futurebutton" id="ship_firebutton_off">Toggle</button>
+		        </div>
+		        <div class="futuregrid__row">
+		          <h4 class="futuregrid__cell">Reset</h4>
+		          <button class="futurebutton" id="ship_reset">RUN</button>
+		        </div>		        			        			        			      
+		      </div>		
 	    </div>
 	  </div>	  
    </div>
