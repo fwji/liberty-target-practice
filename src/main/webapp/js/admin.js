@@ -1,7 +1,8 @@
 var target_status = document.getElementById('target_status');
 var target_ip = document.getElementById('target_ip');
 var target_button = document.getElementById('target_button');
-
+var websocket = null;
+var websocket_url = null;
 
 //Run on the page load
 $(getDevicesStatus());
@@ -48,19 +49,19 @@ $("#litupdate_button").click(function() {
 ******* SPACESHIP ********
 **************************/
 $("#ship_sweep_pan_btn").click(function() {
-  sendSocket("sweepPan");
+  sendDeviceCommandReq("ship", "sweepPan");
 });
 $("#ship_sweep_tilt_btn").click(function() {
-  sendSocket("sweepTilt");
+  sendDeviceCommandReq("ship", "sweepTilt");
 });
 $("#ship_firebutton").click(function() {
-  sendSocket("fireLaser");
+	sendDeviceCommandReq("ship", "fireLaser");
 });
 $("#ship_firebutton_off").click(function() {
-  sendSocket("fireLaserOff");
+	sendDeviceCommandReq("ship", "fireLaserOff");
 });
 $("#ship_reset").click(function() {
-  sendSocket("resetShip");
+	sendDeviceCommandReq("ship", "resetShip");
 });
 
 function sendDeviceCommandReq(device, cmd){
@@ -84,8 +85,6 @@ function sendDeviceCommandReq(device, cmd, value){
 }
 
 function getDevicesStatus() {
-  init('/SentryTargetChallenge/shipsocket');
-  sendSocket("Hello Earthlings!");
   $.get("/SentryTargetChallenge/adminapp/admin/devices/targets", function(data) {
     showDevicesStatus(data, "targets");
   });
@@ -127,10 +126,8 @@ function fail() {
 
 
 ////////////////Socket Code/////////////////
-var websocket = null;
-var websocket_url = null;
-
-//$(init('/SentryTargetChallenge/shipsocket'));
+$(init('/SentryTargetChallenge/shipsocket'));
+sendSocket("Hello Earthlings!");
 
 /***********************************************************
  *********************** WEB SOCKET ************************
