@@ -356,7 +356,7 @@ function printToTerminal() {
     .then("Engaging all Targets... OK")
     .wait(1500)
     .then("Starting the Spaceship... OK")
-    .wait(4500)
+    .wait(8500)
     .then("Laser Energy output... 98.9%")
     .wait(1500)
     .then("All systems are green")
